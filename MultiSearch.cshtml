@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/shared/_Layout2.cshtml"; 
+    var pageTitle="Search Catalog";
+}
+@section t1
+{
+   @pageTitle
+}
+@{ 
+    var db = Database.Open("shopping"); 
+    var searchSelect = Request.Form["searchSelect"];
+    var sqlSelect = "";
+    if(searchSelect=="Category")
+    {
+        sqlSelect = "SELECT * FROM products WHERE " + 
+        "Category LIKE @0"; 
+    } 
+    else if(searchSelect=="Price")
+    {
+        sqlSelect = "SELECT * FROM products WHERE " + 
+        "Price LIKE @0"; 
+    
+    }
+    else if(searchSelect=="Name")
+    {
+        sqlSelect = "SELECT * FROM products WHERE " + 
+        "Name LIKE @0"; 
+    
+    }   
+    var searchWords = Request["searchTerm"].Split(' '); 
+    IEnumerable<dynamic> data = Enumerable.Empty<string>(); 
+        foreach(var word in searchWords) 
+        { 
+            data = data.Concat(db.Query(sqlSelect, "%" + word + "%").ToList()); 
+        }
+         
+}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <table width="100%"  border="10" cellspacing="0" cellpadding="0" align="center">
+		<tr><td>
+        <h1 style="color:#ff6a00; margin-left: 200px">Search Result</h1> 
+        
+        <p style="color:#0094ff; margin-left: 180px">@data.Count() products found matching: <em>@searchWords</em></p> 
+        <ul id="searchResult"> 
+        <table width="734"  border="0" cellspacing="0" cellpadding="0">
+		    <tr>
+			
+	            @foreach (var row in data) 
+                { 
+                 <ul> 
+                    <td>@productInfo.defaultProducts(row.Image,row.Name,row.Price)</td>
+                  </ul> 
+                } 
+            
+			</tr>
+		</table>
+                
+        </ul> 
+        
+    </body>
+</html>

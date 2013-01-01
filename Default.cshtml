@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Shared/_Layout.cshtml";
+    var pageTitle="Home Page";
+}
+@section t1
+{
+   @pageTitle
+}
+@{
+  //  var dbs = Database.Open("shopping");
+  //  var selectQueryString = "SELECT * FROM products ORDER BY Name";
+  //  var data=dbs.Query(selectQueryString);
+
+}
+@{ 
+App.offset1=0;
+App.offset2=0;
+    string value="";
+    var fetch=0;
+    
+    var  db = Database.Open("shopping");
+
+    var slideQuery="SELECT * FROM Slides ORDER BY Image";
+    var slideData=db.Query(slideQuery);
+
+    var query = "SELECT * FROM products ORDER BY Name";
+    var data = db.Query(query);
+
+    var query1 = "SELECT * FROM products ORDER BY Name OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY";
+    var data1= db.Query(query1);
+
+    var query2 = "SELECT * FROM products ORDER BY Name OFFSET 3 ROWS FETCH NEXT 3 ROWS ONLY";
+    var data2= db.Query(query2);
+
+    var count=data.Count();
+    
+    
+    if(IsPost)
+    {
+           if(Request.Form["submit_button"]=="Next"){
+               if(App.offset2>count)
+               {
+                    
+                    fetch=3;
+                    var query3="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset1 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                    data1= db.Query(query3);
+                    var query4="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset2 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                    data2= db.Query(query4);
+
+               }
+               else
+               {    
+                    App.offset1=App.offset1+6;
+                    App.offset2=App.offset2+6;
+                    fetch=3;
+                    if(App.offset1>=0 && App.offset2>=0)
+                    {
+                 
+                    
+                        var query3="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset1 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                        data1= db.Query(query3);
+                        var query4="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset2 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                        data2= db.Query(query4);
+                    
+                    }
+                    else
+                    {
+                        App.offset1=App.offset1-6;
+                        App.offset2=App.offset2-6;
+                    }
+                 }
+                
+            if(Request.Form["submit_button"]=="Previous")
+            {
+                App.offset1=App.offset1-6;
+                App.offset2=App.offset2-6;
+                fetch=3;
+                if(App.offset1>=0 && App.offset2>=0)
+                {
+                    var query3="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset1 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                    data1= db.Query(query3);
+                    var query4="SELECT * FROM products ORDER BY Name OFFSET "+ @App.offset2 +" ROWS FETCH NEXT "+ fetch +" ROWS ONLY";
+                    data2= db.Query(query4);
+                }
+                else
+                {
+                    App.offset1=App.offset1+6;
+                    App.offset2=App.offset2+6;
+                }
+            }
+           
+          }
+                 
+    }
+}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="~/Styles/style.css" />
+        <script src="~/Styles/jquery.min.js"></script>
+        <script src="~/Styles/jquery.easing.min.js"></script>
+        <script src="~/Styles/slides.min.jquery.js"></script>
+        <script>
+          $(function(){
+           $('slides').slides({
+            preload: true,
+            preloadImage: 'images/loading.gif',
+            play: 200,
+            pause: 1500,
+            hoverPause: true
+           });
+          });
+         </script>
+            
+    </head>
+    <body>
+       																																																																																																																																																																								
+	 <div id="center" class="column">
+	  	<div class="news">      
+           <div id="slides">
+            <div class="slides_container">
+                        @foreach (var r in slideData){
+            @productInfo.SlidesH(r.Image)
+                }
+            </div>    
+           </div>   
+        </div>
+	  	<div id="content">
+			<img src="images/title2.gif" alt="" width="540" height="29" /><br />
+			<p>Camera House has all of the latest photographic equipment from all the leading brands including Sony, Canon, Nikon, Panasonic and many more across Digital Still, Compact Pro, SLR, Video, Shoot & Share and accessories.<br /></p>
+			<img src="Images/title3.gif" alt="" width="540" height="26" class="pad25" />
+			
+              <div class="stuff">
+                  @foreach(var row1 in data1)
+                  {
+                    @productInfo.defaultProducts(row1.Image,row1.Name,row1.Price)
+                  }
+                  <p></p>
+              </div>
+              <div class="stuff">
+                  @foreach(var row2 in data2)
+                  {
+                    @productInfo.defaultProducts(row2.Image,row2.Name,row2.Price)
+                  }
+                <p></p>
+              </div>
+              <form action="" method="post">
+                <input name="submit_button" type="submit" value="Previous" class="button1" style="margin-left: 170px;"/>
+                <input name="submit_button" type="submit" value="Next" class="button1" style="margin-left: 50px; margin-bottom: 10px"/> </form>
+		</div>
+     </div>
+        
+    </body>
+</html>

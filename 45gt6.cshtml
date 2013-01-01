@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Search Product";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+    var db=Database.Open("shopping");   
+    var query="SELECT *from products";
+    var data=db.Query(query);
+
+}
+
+
+
+
+
+   <div >
+        
+    <div class="row">
+        <div class="twelve columns">
+            <div class="row">
+                <div class="twelve columns">
+                    <ul>
+                        <h1><a href="Admin.cshtml">Admin Panel</a></h1>
+                    </ul>
+               </div>
+            </div>
+
+            <div class="row">
+                 <div class="twelve columns">
+                    <div>
+                        <form method="post" action="" class="custom">
+                            <ul><li><a style="font-size: 15px;margin-left:15px;color: #000;margin-bottom:10px" href=@Href("~/AddProduct.cshtml")>Add New Product</a></li>
+                                <li><a style="font-size: 15px;margin-left: 15px;color: #000;margin-bottom: 10px" href=@Href("~/SearchProduct.cshtml")>Search Product</a></li>
+                            </ul>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Included JS Files (Compressed) -->
+    <script src="./AddProduct_files/jquery.js"></script>
+    <script src="./AddProduct_files/foundation.min.js"></script>
+    <!-- Initialize JS Plugins
+    -->
+    <script src="./AddProduct_files/app.js"></script>
+       

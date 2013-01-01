@@ -1,0 +1,26 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@RenderSection("t1")</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="Styles/style.css" />
+    </head>
+    <body>
+        @RenderPage("~/Shared/_Header.cshtml")
+        <div id="container">
+              
+              
+                    @RenderBody()
+                    @RenderPage("~/Shared/_Left.cshtml")
+                    @RenderPage("~/Shared/_Right.cshtml")
+              
+	    </div>
+        
+        
+        @RenderPage("~/Shared/_Footer.cshtml")
+        
+    </body>
+</html>

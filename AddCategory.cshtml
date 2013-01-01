@@ -1,0 +1,109 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Add Category";
+}
+@section t1
+{
+   @pageTitle
+}
+
+
+@{
+    if(IsPost)
+    {
+            Validation.RequireField("cName", "Category name is required.");
+
+            var db = Database.Open("shopping");
+            var q="SELECT * from Category";
+            var data=db.Query(q);
+            int count=0;
+            foreach(var row in data)
+            {
+               count++; 
+            }
+    
+
+            count=System.Convert.ToInt32(count);
+            count=count+1;
+
+            var Name = Request.Form["cName"];
+            var insertQuery = "INSERT INTO Category (catId,catName)" +
+                        "VALUES (@0,@1)";
+                    db.Execute(insertQuery,count,Name);
+            }
+    }
+}
+
+ 
+        
+    <div class="row">
+        <div class="twelve columns">
+            <!-- Header -->
+            <!-- Navigation -->
+            <div class="row">
+                <div class="twelve columns">
+                    <ul><h1><a href="AddCategory.cshtml">Add Category</a></h1></ul>
+                </div>
+            </div>
+            <!-- End Navigation -->
+            <!-- End Header -->
+            <div class="row">
+                <div class="twelve columns">
+                    <div>
+
+<!-- Right aligned and inline labels -->
+        <form method="post" action="" class="custom">
+
+        
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Name:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" placeholder="Category Name" class="eight" name="cName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Description:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" placeholder="Category Description" name="cDescription">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="offset-by-six two mobile-one columns">
+              <a class="secondary button" href="~/Admin.cshtml">Cancel</a>
+            </div>
+            <div class="four mobile-three columns">
+                <a href="~/Admin.cshtml"><input type="submit" class="button" value="Save"></a>
+            </div>
+         </div>
+
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+    </form>
+
+</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Included JS Files (Compressed) -->
+    <script src="./AddProduct_files/jquery.js"></script>
+    <script src="./AddProduct_files/foundation.min.js"></script>
+    <!-- Initialize JS Plugins
+    -->
+    <script src="./AddProduct_files/app.js"></script>
+ 

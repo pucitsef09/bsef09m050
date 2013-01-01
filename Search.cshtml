@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/shared/_Layout2.cshtml"; 
+    var pageTitle="Search Category";
+}
+@section t1
+{
+   @pageTitle
+}
+@{ 
+    var db = Database.Open("shopping"); 
+    var category=UrlData[0];
+    //var sqlSelect=null;
+   IEnumerable<dynamic> data = Enumerable.Empty<string>(); 
+    if(category!=null)
+    {
+       var sqlSelect = "SELECT * FROM products WHERE " + 
+        "Category LIKE @0"; 
+       data=db.Query(sqlSelect,category);
+
+    }
+    
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <table width="100%"  border="10" cellspacing="0" cellpadding="0" align="center">
+		<tr><td>
+        <h1 style="color:#ff6a00; margin-left: 200px">Search Result</h1> 
+        
+        <p style="color:#0094ff; margin-left: 180px">@data.Count() products found matching: <em>@category</em></p> 
+        <ul id="searchResult"> 
+        <table width="734"  border="0" cellspacing="0" cellpadding="0">
+		    <tr>
+			
+	            @foreach (var row in data) 
+                { 
+                 <ul> 
+                    <td>@productInfo.defaultProducts(row.Image,row.Name,row.Price)</td>
+                  </ul> 
+                } 
+            
+			</tr>
+		</table>
+                
+        </ul> 
+        
+    </body>
+</html>

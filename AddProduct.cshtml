@@ -1,0 +1,182 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Add Product";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+    Validation.RequireField("pName", "Product name is required.");
+    Validation.RequireField("pDescription", "Product description is required.");
+    Validation.RequireField("pPrice", "Product price is required.");    
+    Validation.RequireField("pQuantity", "Product quantity is required.");    
+
+
+    var db = Database.Open("shopping");
+    var q="SELECT *from Category";
+    var data=db.Query(q);
+
+
+    var Name = Request.Form["pName"];
+    var Price = Request.Form["pPrice"];
+    var Quantity = Request.Form["pQuantity"];
+    var Description = Request.Form["pDescription"];
+    var Category = Request.Form["pCategory"];
+    var Features=Request.Form["pFeatures"];
+
+    
+   
+    WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+    
+    if(IsPost)
+    {
+        
+        photo = WebImage.GetImageFromRequest();
+        if(photo != null)
+        {
+            newFileName =    Path.GetFileName(photo.FileName);
+            
+            imagePath = @"Images\" + newFileName;
+           
+            photo.Save(@"~\" + imagePath);
+            
+        }       
+        var Image="~/Images/"+newFileName;
+        var insertQuery = "INSERT INTO products (Name, Image, Price,Description,Features,Category) " +
+                            "VALUES (@0, @1, @2, @3,@4,@5)";
+        db.Execute(insertQuery, Name,Image,Price,Description,Features,Category);
+        Response.Redirect("~/Admin.cshtml");
+        
+    }
+
+}
+
+
+
+
+
+
+        
+    <div class="row">
+        <div class="twelve columns">
+            <!-- Header -->
+            <!-- Navigation -->
+            <div class="row">
+                <div class="twelve columns">
+                    <ul>
+                   
+                        
+                        <h1>
+                            <a href="AddProduct.cshtml">Add Product</a></h1>
+                        
+                       @* <li class="toggle-topbar"><a href="AddProduct.cshtml"></a></li>*@
+                    </ul>
+                    
+                  </ul>
+               </div>
+        </div>
+<!-- End Navigation -->
+            <!-- End Header -->
+            <div class="row">
+                <div class="twelve columns">
+                    <div>
+
+<!-- Right aligned and inline labels -->
+        <form method="post" action="" class="custom" enctype="multipart/form-data">
+
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label for="customDropdown" class="right inline">Category:</label>
+            </div>
+            <div class="ten mobile-three columns">
+                <div class="eight">
+                    <select name="pCategory" >
+                        @foreach(var row in data)
+                        {
+                            <option>@row.catName</option>    
+                        }
+                        
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Name:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" placeholder="Product Name" class="eight" name="pName" value=@Request["pName"]>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Description:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" placeholder="Product Description" name="pDescription" value=@Request["pDescription"]>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Features:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" placeholder="Product Features" name="pFeatures" value=@Request["pFeatures"]>
+        </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Quantity:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" placeholder="Product Quantity" name="pQuantity" value=@Request["pQuantity"]>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Price:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="three" placeholder="Price" name="pPrice" value=@Request["pPrice"]>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Image:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="file"  placeholder="Image URL" name="pImage" id="pImage" value=@Request["pImage"]/>
+                
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="offset-by-six two mobile-one columns">
+              <a class="secondary button" href="Admin.cshtml">Cancel</a>
+            </div>
+            <div class="four mobile-three columns">
+                <input type="submit" class="button" value="Save">
+            </div>
+         </div>
+
+  
+    </form>
+
+</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Included JS Files (Compressed) -->
+    <script src="./AddProduct_files/jquery.js"></script>
+    <script src="./AddProduct_files/foundation.min.js"></script>
+    <!-- Initialize JS Plugins
+    -->
+    <script src="./AddProduct_files/app.js"></script>
+       

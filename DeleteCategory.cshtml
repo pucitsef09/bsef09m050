@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Delete Product";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+
+      var db = Database.Open("shopping");
+      var CategoryName = UrlData[0];
+      if (CategoryName.IsEmpty())
+      {
+          Response.Redirect("~/Admin");
+      }
+      var prod = db.QuerySingle("SELECT * FROM Category WHERE catName = @0", CategoryName);
+      if( IsPost && !CategoryName.IsEmpty())
+      {
+        var deleteQueryString = "DELETE FROM Category WHERE catName=@0";
+        db.Execute(deleteQueryString, CategoryName);
+        Response.Redirect("~/Admin");
+      }
+}
+</br> </br></br></br></br></br>
+<h4 style="color: #0094ff">Delete Category - Confirmation</h4>
+  <form method="post" action="" name="form">
+    <p>Are you sure you want to delete the following Category?</p>
+
+    <p>Name: @prod.catName <br />
+       Id: @prod.catId <br />
+       
+    <span><input type="submit" value="Delete" /></span>
+    <span><a href="Admin.cshtml"><input type="submit" value="Cancel" /></a></span>
+  </form>

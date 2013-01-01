@@ -1,0 +1,107 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Login";
+}
+@section t1
+{
+   @pageTitle
+}
+@{ 
+     var msg="";
+    Validation.RequireField("login", "Username is required");
+    Validation.RequireField("password", "password is required");
+   if(IsPost)
+    {
+       
+         if(Validation.IsValid())
+         {
+             var username = Request["login"];
+             var password = Request["password"];
+             if(username=="Admin" && password=="123")
+             {
+                Response.Redirect("Admin.cshtml");
+             }
+             else
+             {
+                if(WebSecurity.Login(username, password))
+                 {
+                     Response.Redirect("~/Default.cshtml");
+                 }
+                 else
+                 {
+                     msg="Login or password is invalid";
+                     ModelState.AddFormError("Unable to log in.");
+                 }
+             }
+
+                 
+             
+         }
+    }
+}
+
+
+
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://mystore.apphb.com/Admin/AddPoduct.cshtml?pName=&pDescription=&pPrice=# -->
+<html>
+    <head>
+        <title>Add Product</title>
+    
+        <!-- Included CSS Files (Compressed) -->
+        <link rel="stylesheet" href="/Styles/foundation.min.css">
+        <link rel="stylesheet" href="/Styles/app.css">
+        <script src="~/Scripts/jquery-1.6.2.js"></script>
+        <script src="~/Scripts/jquery.validate.js"> </script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <style>
+            .field-validation-error{
+              color:red;
+               font-weight:bold;
+               background-color:yellow;
+            }
+
+            .input-validation-error{
+              color:red;
+              font-weight:bold;
+              background-color:pink;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        
+       <font face="verdana,arial" size=-1>
+        <center>
+            <table cellpadding='2' cellspacing='0' border='0' id='ap_table'>
+                    <tr>
+                    <td bgcolor="black"><table cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td bgcolor="#3399CC" align=center style="padding:2px;padding-bottom:4px"><b><font size=-1 color="white" face="verdana,arial"></b>Enter your login and password</b></font></th>
+                    </tr>
+                    <tr><td bgcolor="white" style="padding:5px"><br>
+                    <form method="post">
+                        <input type="hidden" name="action" value="login">
+                        <input type="hidden" name="hide" value=""><center>
+                        <table>
+                            <tr><td><font face="verdana,arial" size=-1>Login:</font></td><td><input type="text" name="login" @Validation.For("login")></td></tr> 
+                            <tr><td>@Html.ValidationMessage("login")</td></tr> 
+                            <tr><td><font face="verdana,arial" size=-1>Password:</font></td><td><input type="password" name="password" @Validation.For("password")></td></tr>
+                            <tr><td>@Html.ValidationMessage("password")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>&nbsp;</font></td><td><font face="verdana,arial" size=-1><input type="submit" value="Enter" width="40px" height="17px"></font></td></tr>
+                            <tr><td colspan=2>@msg<font face="verdana,arial" size=-1>&nbsp;</font></td></tr>
+                            <tr><td colspan=2><font face="verdana,arial" size=-1>&nbsp;</font></td></tr>
+                            <tr><td colspan=2><font face="verdana,arial" size=-1>Not member yet? Click <a href="signUp.cshtml">here</a> to register.</font></td></tr>
+                        </table></center>
+                    </form>
+                        </td>
+           </tr>
+           </table>
+           </td>
+           </tr>
+           </table>
+
+           
+       
+            </div>
+    </body>
+</html>

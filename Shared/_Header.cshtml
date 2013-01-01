@@ -1,0 +1,55 @@
+﻿@{
+    var db=Database.Open("shopping");
+    var query="Select *from Cart";
+    var data=db.Query(query);
+    int count=0;
+    foreach(var row in data)
+    {
+        count++;
+    }
+
+}
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Header</title>
+        <link rel="stylesheet" type="text/css" href="~/Styles/style.css" />
+    </head>
+    <body>
+        <div id="header">
+		<a href="Default.html" class="float"><img src="~/Images/logo.jpg" alt="Logo" width="171" height="73" /></a>																																																		
+	  <div class="topblock1">
+			Currency:<br /><select><option>US Dollar</option></select>
+		</div>
+	    <div class="topblock2">
+			Lanquage:<br />
+		    <a href="#"><img src="~/Images/flag1.gif" alt="flag1" width="19" height="11" /></a>																																		
+		    <a href="#"><img src="~/Images/flag2.gif" alt="flag2" width="19" height="11" /></a>
+		    <a href="#"><img src="~/Images/flag3.gif" alt="flag3" width="19" height="11" /></a>
+		    <a href="#"><img src="~/Images/flag4.gif" alt="flag4" width="19" height="11" /></a>
+		    <a href="#"><img src="~/Images/flag5.gif" alt="flag5" width="19" height="11" /></a>
+		    <a href="#"><img src="~/Images/flag6.gif" alt="flag6" width="19" height="11" /></a>
+		</div>
+		<div class="topblock2">
+			<img src="~/Images/shopping.gif" alt="Cart" width="24" height="24" class="shopping" />																																																																									
+		 	<p>Shopping cart</p> <a href="~/ViewCart.cshtml"><strong>@count</strong> <span>items</span></p>
+		</div>
+		<ul id="menu">
+			<li><img src="~/Images/li.gif" alt="" width="19" height="29" /></li>
+			<li class="li1"><a href="Default.html"><img src="~/Images/but1_a.jpg" alt="but1" width="90" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but2.gif" alt="but2" width="129" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but3.gif" alt="but3" width="127" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but4.gif" alt="but4" width="113" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but5.gif" alt="but5" width="132" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but6.gif" alt="but6" width="105" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but7.gif" alt="but7" width="82" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but8.gif" alt="but8" width="112" height="29" /></a></li>
+			<li><a href="Default.html"><img src="~/Images/but9.gif" alt="but9" width="71" height="29" /></a></li>
+		</ul>
+	</div>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Delete Product";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+
+      var db = Database.Open("shopping");
+      var ProductName = UrlData[0];
+      if (ProductName.IsEmpty())
+      {
+          Response.Redirect("~/Admin");
+      }
+      var prod = db.QuerySingle("SELECT * FROM products WHERE Name = @0", ProductName);
+      if( IsPost && !ProductName.IsEmpty())
+      {
+        var deleteQueryString = "DELETE FROM products WHERE Name=@0";
+        db.Execute(deleteQueryString, ProductName);
+        Response.Redirect("~/Admin");
+      }
+}
+</br> </br></br></br></br></br>
+<h4 style="color: #0094ff">Delete Product - Confirmation</h4>
+  <form method="post" action="" name="form">
+    <p>Are you sure you want to delete the following product?</p>
+
+    <p>Name: @prod.Name <br />
+       Description: @prod.Description <br />
+       Price: @prod.Price</p>
+    <span><input type="submit" value="Delete" /></span>
+    <span><a href="Admin.cshtml"><input type="submit" value="Cancel" /></a></span>
+  </form>

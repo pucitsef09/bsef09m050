@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Delete Item from Cart";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+
+      var db = Database.Open("shopping");
+      var Name = UrlData[0];
+      if (Name.IsEmpty())
+      {
+          Response.Redirect("~/Default");
+      }
+      var prod = db.QuerySingle("SELECT * FROM Cart WHERE ProductName = @0", Name);
+      if( IsPost && !Name.IsEmpty())
+      {
+        var deleteQueryString = "DELETE FROM Cart WHERE ProductName=@0";
+        db.Execute(deleteQueryString, Name);
+        Response.Redirect("~/ViewCart.cshtml");
+      }
+}
+</br> </br></br></br></br></br>
+<h4 style="color: #0094ff">Delete Item from Cart - Confirmation</h4>
+  <form method="post" action="" name="form">
+    <p>Are you sure you want to delete the following Item?</p>
+
+    <p>Name: @prod.ProductName <br />
+       
+    <span><input type="submit" value="Delete" /></span>
+    <span><a href="ViewCart.cshtml"><input type="submit" value="Cancel" /></a></span>
+  </form>

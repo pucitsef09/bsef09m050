@@ -1,0 +1,45 @@
+﻿@{
+    var db=Database.Open("shopping");
+    var query="Select *from Category";
+    var data=db.Query(query);
+}
+
+<!DOCTYPE html>
+
+       <div id="left" class="column">
+	  	<div class="block">
+		<img src="~/Images/title1.gif" alt="" width="168" height="42" /><br />
+			<ul id="navigation">
+
+                @foreach(var row in data)
+                {
+                    <li class="color"><a href="@Href("~/Search.cshtml",@row.catName)">@row.catName</a></li>
+                }
+		    </ul>
+		</div>
+		<a href="#"><img src="~/Images/cam1.jpg" alt="" width="172" height="200" /></a>
+           <br/>
+           <br/>
+            <form action="~/MultiSearch.cshtml" method="post">
+                   <fieldset>
+                            <legend><b>Search</b></legend>
+                            <br/>
+                            <br/>
+                            <select name="searchSelect"  style="width: 155px;margin-left: 5px" class="cls"  id="searchSelect">
+									        <option value="Name">Name</option>
+                                            <option value="Category">Category</option>        
+                                            <option value="Price">Price</option>
+                             </select>
+                             <br/>
+                             <br/>
+                            <p style="width: 150px;margin-left: 5px">@Html.TextBox("searchTerm")</p>
+                            <br/>
+                            <input type="Submit" value="Search" style="margin-left:40px;width: 90px;height: 25px" />
+                            <br/>
+                            <br/>
+                   </fieldset> 
+            </form>
+		        
+            
+      </div>
+     

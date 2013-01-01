@@ -1,0 +1,54 @@
+﻿@{
+    var date=DateTime.Today.ToShortDateString();
+}
+<!DOCTYPE html>
+    <script src="~/Styles/jquery.min.js"></script>
+     <script src="~/Styles/jquery.easing.min.js"></script>
+     <script src="~/Styles/slides.min.jquery.js"></script>
+         <script>
+          $(function(){
+           $('#slides').slides({
+            preload: true,
+            preloadImage: 'images/loading.gif',
+            play: 2500,
+            pause: 2500,
+            hoverPause: true
+           });
+          });
+         </script>
+    <style>
+        #login
+        {
+            padding-left: 70px;
+            padding-bottom: 50px;
+            font-size: 18pt;
+            
+        }
+        
+        
+    </style>
+    <body>
+        <div id="right" class="column">
+	  	<a href="#"><img src="~/Images/bannerRyt.jpg" alt="" width="237" height="216" /></a><br />
+		<div class="rightblock">
+			<img src="~/Images/title4.gif" alt="" width="223" height="29" /><br />
+			<div class="blocks">
+				<img src="~/Images/top_bg.gif" alt="" width="218" height="12" />
+				<p id="login"><a style="margin-top: 10px" href="~/login.cshtml" class="more" >Login</a></p>
+                 <h4 style="margin: 0px 0px 0px 53px">New to Shopping?</h4>
+                <a href="signUp.cshtml" style="margin: 0px 0px 20px 53px">Create an account</a>
+				<img src="~/Images/bot_bg.gif" alt="" width="218" height="10" /><br />
+			</div>
+			<div class="blocks">
+				<img src="~/Images/top_bg.gif" alt="" width="218" height="12" />
+				<div id="news">
+					<img src="~/Images/title5.gif" alt="" width="201" height="28" />
+					<span class="date">@date</span>
+					<p>There's been a lot of talk about the Samsung Galaxy Camera. Built around Google's Android 4.1 Jelly Bean operating system and with the very same core innards as the Samsung Galaxy S III smartphone, there's little doubt that this is as multimedia capable. </p>
+					<a href="#" class="more">read more</a>
+				</div>
+				<img src="~/Images/bot_bg.gif" alt="" width="218" height="10" /><br />
+			</div>
+		</div>
+	  </div>
+     </div>

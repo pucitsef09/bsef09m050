@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Shared/_Layout.cshtml";
+    var pageTitle="Product Information";
+}
+@section t1
+{
+   @pageTitle
+}
+@{
+  var db = Database.Open("shopping");
+  var ProductName = UrlData[0];
+  var prod = db.QuerySingle("SELECT * FROM products WHERE Name = @0", ProductName);
+  
+    //var selectedProd=db.Query(prod, ProductName);
+    var Name=prod.Name;
+    var Image=prod.Image;
+    var Price=prod.Price;
+    var Desc=prod.Description;
+    var features=prod.Features;
+
+    var selectQueryString = "SELECT * FROM products ORDER BY Name";
+    var data=db.Query(selectQueryString);
+
+    if(IsPost)
+    {
+        
+    var insertQuery = "INSERT INTO Cart (ProductName,ProductPrice,ProductImage,ProductDesc) " +
+                            "VALUES (@0, @1, @2, @3)";
+        db.Execute(insertQuery, Name,Price,Image,Desc);
+        Response.Redirect("~/Default.cshtml");
+        
+    
+    }
+
+
+}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="~/Styles/style.css" />
+    </head>
+    <body>
+        
+	<div id="center" class="column">
+	  	<div id="content">
+			<div id="about">
+				<p class="tree"><a href="#">Category</a>  >  <a href="#">Category2</a>  >  <a href="#">Category3</a>  >  Name Product</p>
+				@productInfo.product(Name,Image,Price,Desc,features)
+                
+                
+                
+			</div>
+			<img src="~/Images/title6.gif" alt="" width="537" height="23" class="pad25" />
+			<div class="stuff">
+				 @foreach(var row in data)
+                  {
+                    @productInfo.defaultProducts(row.Image,row.Name,row.Price)
+                  }
+            
+			</div>
+		</div>
+	  </div>
+	  
+
+    </body>
+</html>

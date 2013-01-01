@@ -1,0 +1,88 @@
+﻿@{
+    double subtotal=0;
+    double total=0;
+    double shipping=0;
+    var db=Database.Open("shopping");
+    var query="SELECT *from Cart";
+    var data=db.Query(query);
+    int col=1;
+    int count=0;
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    @RenderPage("~/Shared/_Header.cshtml")
+    <body>
+        <div id="main" style="margin-top: 100px;margin-left: 60px">
+            <br></br>
+           <br></br>
+         
+            <h2>Shopping Cart</h2>
+            <br/>
+            <br/>
+            <div>
+                <table style="border: 2px solid ;border-color: #67a4b4">
+                                
+                    <tr style="height: 40px;font-size: 15pt"><th style="background-color: #67a4b4">Item No.</th><th style="background-color: #67a4b4">Product Name</th><th style="background-color: #67a4b4">Image</th><th style="background-color: #67a4b4">Price</th><th style="background-color: #67a4b4">Description</th><th style="background-color: #67a4b4">Action</th></tr>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_cart">
+                    <input type="hidden" name="upload" value="1">
+                    <input type="hidden" name="business" value="samramubeen@yahoo.com">
+                    @foreach(var row in data)
+                    {
+
+                       count++;                            
+                            <input type="hidden" name="item_name_@count" value="@row.ProductName">
+                            <input type="hidden" name="amount_@count" value="@row.ProductPrice">
+                        <tr>
+                            <td style="width: 150px;text-align: center"><strong>Item @col</strong></td>
+                            <td style="width: 150px;text-align: center">@row.ProductName</td>
+                            <td style="width: 150px;text-align: center"><img src=@Href(row.ProductImage) width="80px" height="80px"/></td>
+                            <td style="width: 150px;text-align: center">@row.ProductPrice</td>
+                            <td style="width: 150px;text-align: center">@row.ProductDesc</td>
+                            <td style="width: 150px;text-align: center"><a href=@Href("removeItem.cshtml",@row.ProductName)>Remove</a></td>
+                        </tr>
+                        String price=row.ProductPrice;
+                        String sub=price.Substring(1,price.Length-1);
+                        subtotal=subtotal+System.Convert.ToDouble(sub);
+                        shipping=shipping+5;
+                        col++;
+                    }
+                </table>
+            </div>
+            @{total=subtotal+shipping;}
+            </br>
+            </br>
+            <div id="totals"> 
+                <br></br>
+                <p><strong>Sub Total : </strong>$@subtotal<p>
+                <br></br>
+                <p><strong>Shipping : </strong>$@shipping<p>
+                <br></br>
+                <p><strong>Total : </strong>$@total<p>
+                <br></br>
+            </div>
+           
+                
+                    <table><tr><td><a href="~/Default.cshtml" style="background-color: #ffad3b;color:#475a88; font-size:14pt ;height: 45px"><b>Add More</b></a></td>
+                    
+                    <td><input type="image" src="http://www.paypal.com/en_US/i/btn/sc-but-01.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+                     </td>
+                        </tr>
+                        </table>
+                </form>
+        
+          
+            <br/>
+            <br/>
+            <br/>
+        </div>
+       @RenderPage("~/Shared/_Footer.cshtml")
+    </body>
+</html>

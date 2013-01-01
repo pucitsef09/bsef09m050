@@ -1,0 +1,175 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Update Product";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+    var db = Database.Open("shopping");
+    
+    var q="SELECT *from Category";
+    var data=db.Query(q);
+    
+    var selectQueryString = "SELECT * FROM products WHERE Name=@0";
+
+    var ProductName  = UrlData[0];
+    var ProductCat=UrlData[1];
+    if (ProductName.IsEmpty())
+    {
+         Response.Redirect("~/Admin");
+    }
+
+    var row = db.QuerySingle(selectQueryString, ProductName);
+    
+    var Category=row.Category;
+    var Name = row.Name;
+    var Description = row.Description;
+    var Features=row.Features;
+    var Price = row.Price;
+    var imagePath=row.Image;
+        
+  
+    if(IsPost)
+    {
+    var uCategory=Request.Form["pCategory"];
+    var uName = Request.Form["pName"];
+    var uDescription=Request.Form["pDescription"];
+    var uFeatures=Request.Form["pFeatures"];
+    var uQuantity=Request.Form["pQuantity"];
+    var uPrice=Request.Form["pPrice"];
+    
+    WebImage photo = null;
+    var newFileName = "";
+    var uimagePath = "";
+    <p>"File Count  = " @Request.Files.Count</p>
+        photo = WebImage.GetImageFromRequest();
+        
+        if(photo != null)
+        {
+            newFileName =    Path.GetFileName(photo.FileName);
+            
+            uimagePath = @"Images\" + newFileName;
+            
+            photo.Save(@"~\" + uimagePath);           
+        }
+            var uImage="~/Images/"+newFileName;
+            var updateQueryString ="UPDATE products SET Name=@0,Image=@1,Price=@2,Description=@3,Features=@4,Category=@5 WHERE Name=@6" ;
+            db.Execute(updateQueryString, uName,uImage,uPrice,uDescription,uFeatures,uCategory,ProductName);
+            Response.Redirect(@Href("~/Admin"));
+       
+     }
+}
+
+
+
+
+
+   <div >
+        
+    <div class="row">
+        <div class="twelve columns">
+            <!-- Header -->
+            <!-- Navigation -->
+            <div class="row">
+                <div class="twelve columns">
+                    <ul>
+                        <h1><a href="updateProduct.cshtml">Update Product</a></h1>
+                    </ul>
+                </div>
+            </div>
+<!-- End Navigation -->
+            <!-- End Header -->
+            <div class="row">
+                <div class="twelve columns">
+                    <div>
+
+<!-- Right aligned and inline labels -->
+        <form method="post" action="" class="custom">
+
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label for="customDropdown" class="right inline">Category:</label>
+            </div>
+            <div class="ten mobile-three columns">
+                <div class="eight">
+                    <select name="pCategory" >
+                        @foreach(var record in data)
+                        {
+                            <option>@record.catName</option>    
+                        }
+                        
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Name:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" name="pName" value=@Name>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Description:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" name="pDescription" value=@Description>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Features:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="eight" name="pFeatures" value=@Features>
+        </div>
+        </div>
+        
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Price:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="text" class="three" name="pPrice" value=@Price>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two mobile-one columns">
+              <label class="right inline">Image:</label>
+            </div>
+            <div class="ten mobile-three columns">
+              <input type="file"name="pImage" value=@imagePath/>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="offset-by-six two mobile-one columns">
+              <a class="secondary button" href="~/Admin.cshtml">Cancel</a>
+            </div>
+            <div class="four mobile-three columns">
+                <input type="submit" class="button" value="Update">
+            </div>
+         </div>
+
+  
+    </form>
+
+</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Included JS Files (Compressed) -->
+    <script src="./AddProduct_files/jquery.js"></script>
+    <script src="./AddProduct_files/foundation.min.js"></script>
+    <!-- Initialize JS Plugins
+    -->
+    <script src="./AddProduct_files/app.js"></script>
+       

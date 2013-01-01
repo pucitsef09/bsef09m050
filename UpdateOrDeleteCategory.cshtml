@@ -1,0 +1,60 @@
+﻿@{
+    Layout = "~/Shared/_Layout2.cshtml";
+    var pageTitle="Admin";
+}
+@section t1
+{
+   @pageTitle
+}
+
+@{
+    var db=Database.Open("shopping");   
+    var query="SELECT *from Category";
+    var data=db.Query(query);
+
+}
+
+   <div >
+        
+    <div class="row">
+        <div class="twelve columns">
+            <div class="row">
+                <div class="twelve columns">
+                    <ul>
+                        <h1><a href="Admin.cshtml">Admin Panel</a></h1>
+                    </ul>
+               </div>
+            </div>
+
+            <div class="row">
+                 <div class="twelve columns">
+                    <div>
+                        <form method="post" action="" class="custom">
+                            
+                            <table style="border: 2px solid ;border-color: #67a4b4">
+                                
+                                @*<tr><td>Add New Product</td></tr>*@
+                                <tr style="height: 40px;font-size: 21pt"><th style="background-color: #67a4b4">Category Name</th><th style="background-color: #67a4b4">Delete</th></tr>
+                                @foreach(var row in data)
+                                {
+                                    <tr>
+                                        <td style="width: 300px">@row.catName</td>
+                                        <td style="width: 100px;text-align: center"><a href=@Href("~/DeleteCategory.cshtml",@row.catName)><img src="~/Images/del.jpg" width="40px" height="40px"/></a></td>
+                                    </tr>
+                                }
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Included JS Files (Compressed) -->
+    <script src="./AddProduct_files/jquery.js"></script>
+    <script src="./AddProduct_files/foundation.min.js"></script>
+    <!-- Initialize JS Plugins
+    -->
+    <script src="./AddProduct_files/app.js"></script>
+       

@@ -1,0 +1,115 @@
+﻿@{
+      Validation.RequireField("fname","*Enter First Name");
+      Validation.RequireField("lname","*Enter Last Name");
+      Validation.RequireField("email","*Enter Email id");
+      Validation.RequireField("fpassword","*Enter Password");
+      Validation.RequireField("lpassword","*Enter Password again");
+      Validation.RequireField("uname","*Enter User Name");
+     
+      var db = Database.Open("shopping");
+
+      if(IsPost)
+      {
+          if(Validation.IsValid())
+          {
+              var firstName = Request.Form["fname"];
+              var lastName = Request.Form["lname"];
+              var email = Request.Form["email"];
+              var password = Request.Form["fpassword"];
+              var confirmPassword = Request.Form["lpassword"];
+              var userName = Request.Form["uname"];
+
+              if(WebSecurity.UserExists(userName))
+              {
+                  ModelState.AddError("userName", "*User already exist" );
+              }
+
+              else if(password != confirmPassword)
+              {
+                  ModelState.AddError("confirmPassword", "*Password does not match" );
+              }
+
+              else if(ModelState.IsValid)
+                {
+                    var insertquery = "Insert into registeredUsers(firstName, lastName,email,userName)" + "values (@0,@1,@2,@3)";
+                    db.Execute(insertquery,firstName,lastName,email,userName);
+                
+            
+                     WebSecurity.CreateUserAndAccount(userName,password);
+                    // Roles.AddUserToRole(userName, "User");
+
+                     
+            
+                }             
+          }
+      }
+  
+}
+
+
+
+
+
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://mystore.apphb.com/Admin/AddPoduct.cshtml?pName=&pDescription=&pPrice=# -->
+<html>
+    <head>
+        <title>Add Product</title>
+    
+        <!-- Included CSS Files (Compressed) -->
+        <link rel="stylesheet" href="/Styles/foundation.min.css">
+        <link rel="stylesheet" href="/Styles/app.css">
+        <style>
+            .field-validation-error{
+              color:red;
+               font-weight:bold;
+               background-color:yellow;
+            }
+
+            .input-validation-error{
+              color:red;
+              font-weight:bold;
+              background-color:pink;
+            }
+        </style>
+    </head>
+
+    <body>
+        @RenderPage("~/Shared/_Header.cshtml")
+
+       <font face="verdana,arial" size=-1>
+        <center><table cellpadding='2' cellspacing='0' border='0' id='ap_table' width='950px'>
+                <tr><td bgcolor="#000000"><table cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td bgcolor="#3399CC" align=center style="padding:2;padding-bottom:4"><b><font size=-1 color="white" face="verdana,arial"><b>Enter your details</b></font></th></tr>
+                <tr><td bgcolor="white" style="padding:5"><br>
+                
+                    <form method="post" >
+                    <input type="hidden" name="action" value="signUp">
+                    <input type="hidden" name="hide" value="">
+                    <center>
+                        <table width='800px'>
+                            <tr><td><font face="verdana,arial" size=-1>First Name:</font></td><td><input type="text" name="fname" @Validation.For("fname")></td></tr>
+                            <tr><td>@Html.ValidationMessage("fname")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>Last Name:</font></td><td><input type="text" name="lname" @Validation.For("lname")></td></tr>
+                            <tr><td>@Html.ValidationMessage("lname")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>Password:</font></td><td><input type="password" name="fpassword" @Validation.For("fpassword")></td></tr>
+                            <tr><td>@Html.ValidationMessage("fpassword")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>Confirm Password:</font></td><td><input type="password" name="lpassword" @Validation.For("lpassword")></td></tr>
+                            <tr><td>@Html.ValidationMessage("lpassword")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>Email:</font></td><td><input type="text" name="email" @Validation.For("email")></td></tr>
+                            <tr><td>@Html.ValidationMessage("email")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>User Name:</font></td><td><input type="text" name="uname" @Validation.For("uname")></td></tr>
+                            <tr><td>@Html.ValidationMessage("uname")</td></tr>
+                            <tr><td><font face="verdana,arial" size=-1>&nbsp;</font></td><td><font face="verdana,arial" size=-1><a href="~/login.cshtml"><input type="submit" value="Enter"  width="70px" height="30px"></a></font></td></tr>
+                            <tr><td><a href="~/Default.cshtml">Home</td></tr>
+                            <tr><td colspan=2><font face="verdana,arial" size=-1>&nbsp;</font></td></tr>
+                        </table>
+                    </center>
+</form>
+</td></tr></table></td></tr></table>
+
+    <script src="./AddProduct_files/app.js"></script>
+           
+            @RenderPage("~/Shared/_Footer.cshtml")
+            </div>
+    </body>
+</html>
